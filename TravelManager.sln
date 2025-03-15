@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34408.163
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelManager.Server", "TravelManager.Server\TravelManager.Server.csproj", "{3F70EF33-F869-4542-9F67-0016F92CBE5B}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "travelmanager.client", "travelmanager.client\travelmanager.client.esproj", "{2F617FC2-3FBD-458C-9B83-4884DB8A5716}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3F70EF33-F869-4542-9F67-0016F92CBE5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F70EF33-F869-4542-9F67-0016F92CBE5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F70EF33-F869-4542-9F67-0016F92CBE5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F70EF33-F869-4542-9F67-0016F92CBE5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F617FC2-3FBD-458C-9B83-4884DB8A5716}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F617FC2-3FBD-458C-9B83-4884DB8A5716}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F617FC2-3FBD-458C-9B83-4884DB8A5716}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{2F617FC2-3FBD-458C-9B83-4884DB8A5716}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F617FC2-3FBD-458C-9B83-4884DB8A5716}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F617FC2-3FBD-458C-9B83-4884DB8A5716}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8B39D502-459B-4084-AD97-24145C6EE39C}
+	EndGlobalSection
+EndGlobal
