@@ -8,19 +8,18 @@ namespace TravelManager.Server.Controllers
     [Route("[controller]")]
     public class RouteController : ControllerBase
     {
-        private readonly ILogger<WeatherForecastController> _logger;
         private readonly IRouteService _routeService;
 
-        public RouteController(ILogger<WeatherForecastController> logger, IRouteService routeService)
+        public RouteController(IRouteService routeService)
         {
-            _logger = logger;
             _routeService = routeService;
         }
 
         [HttpGet(Name = "GetRoute")]
-        public IActionResult GetRoute(string from, string to)
+        public async Task<IActionResult> GetRoute(string from, string to)
         {
-            return Ok();
+            var route = await _routeService.GetRouteDetails(from, to);
+            return Ok(route.Item2);
         }
 
         [HttpPost(Name = "CreateRoute")]
@@ -31,14 +30,16 @@ namespace TravelManager.Server.Controllers
         }
 
         [HttpDelete(Name = "DeleteRoute")]
-        public IActionResult DeleteRoute(int routeId)
+        public async Task<IActionResult> DeleteRoute(string from, string to)
         {
+            await _routeService.DeleteRoute(from, to);
             return Ok();
         }
 
         [HttpPatch(Name = "UpdateRoute")]
-        public IActionResult UpdateRoute(int routeId, string from, string to, decimal price)
+        public async Task<IActionResult> UpdateRoute(int routeId, string from, string to, decimal price)
         {
+            await _routeService.UpdateRoute(routeId, from, to, price);
             return Ok();
         }
 
