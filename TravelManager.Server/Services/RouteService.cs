@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace TravelManager.Server.Services
 {
     public class RouteService : IRouteService
@@ -8,9 +10,21 @@ namespace TravelManager.Server.Services
             _context = new DatabaseContext();
         }
         public async Task CreateRoute(string origin, string destination, decimal price)
-        {   
-            var originNode = new NodeModel { Name = origin.ToUpper() };
-            var destinationNode = new NodeModel { Name = destination.ToUpper() };
+        {
+            origin = origin.ToUpper();
+            destination = destination.ToUpper();
+            var routes = await _context.Routes
+                .Include(r => r.Origin)
+                .Include(r => r.Destination)
+                .ToListAsync();
+
+            if (routes.Any(i => i.Origin.Name == origin && i.Destination.Name == destination))
+            {
+                throw new Exception("Destino já existe, atualize o registro");
+            }
+
+            var originNode = new NodeModel { Name = origin };
+            var destinationNode = new NodeModel { Name = destination };
 
             var route = new RouteModel
             {

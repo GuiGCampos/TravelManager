@@ -24,9 +24,9 @@ namespace TravelManager.Server.Controllers
         }
 
         [HttpPost(Name = "CreateRoute")]
-        public IActionResult CreateRoute(string from, string to, decimal price)
+        public async Task<IActionResult> CreateRoute(string from, string to, decimal price)
         {
-            _routeService.CreateRoute(from, to, price);
+            await _routeService.CreateRoute(from, to, price);
             return Ok();
         }
 

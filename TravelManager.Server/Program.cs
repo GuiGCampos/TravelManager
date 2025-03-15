@@ -1,4 +1,5 @@
 using TravelManager.Server.Services;
+using TravelManager.Server.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,7 @@ builder.Services.AddScoped<IRouteService, RouteService>();
 
 var app = builder.Build();
 
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
