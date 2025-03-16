@@ -1,14 +1,18 @@
 using TravelManager.Server.Services;
 using TravelManager.Server.Middleware;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "API de Rotas", Version = "v1" });
+    options.EnableAnnotations();
+});
 
 //Dependency Injection
 builder.Services.AddScoped<IRouteService, RouteService>();
@@ -19,7 +23,6 @@ app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {                   
     app.UseSwagger();

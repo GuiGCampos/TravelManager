@@ -19,7 +19,7 @@ namespace TravelManager.Server.Services
 
             if (route.Item1)
             {
-                throw new Exception("Trecho já existe, atualize o registro");
+                throw new ArgumentException("Trecho já existe, atualize o registro");
             }
 
             var originNode = await _context.Nodes.FirstOrDefaultAsync(p => p.Name == origin) ?? new NodeModel { Name = origin };
@@ -46,7 +46,7 @@ namespace TravelManager.Server.Services
 
             if (route is null)
             {
-                throw new Exception("Trecho não existe para ser alterado");
+                throw new ArgumentException("Trecho não existe para ser alterado");
             }
 
             var originNode = await _context.Nodes.FirstOrDefaultAsync(p => p.Name == origin) ?? new NodeModel { Name = origin };
@@ -112,6 +112,83 @@ namespace TravelManager.Server.Services
         private string ApplyFormat(string node)
         {
             return node.Trim().ToUpper();
+        }
+
+        //Implementação Dijkstra
+        public async Task<string> GetLowestPrice(string origin, string destination) 
+        {
+            origin = ApplyFormat(origin);
+            destination = ApplyFormat(destination);
+
+            var nodes = await _context.Set<NodeModel>()
+                .Include(n => n.OriginRoutes)
+                    .ThenInclude(r => r.Destination)
+                .Include(n => n.DestinationRoutes)
+                    .ThenInclude(r => r.Origin)
+                .ToListAsync();
+
+            var originNode = nodes.FirstOrDefault(n => n.Name == origin);
+            var destinationNode = nodes.FirstOrDefault(n => n.Name == destination);
+
+            if (originNode == null || destinationNode == null)
+            {
+                return "Origem ou destino não cadastrado";
+            }
+
+            var distances = nodes.ToDictionary(n => n.Id, n => decimal.MaxValue);
+            var previousNodes = new Dictionary<int, RouteModel>();
+            var unvisited = nodes.Select(n => n.Id).ToList();
+
+            distances[originNode.Id] = 0;
+
+            while (unvisited.Count > 0)
+            {
+                var currentNodeId = unvisited.OrderBy(id => distances[id]).First();
+                unvisited.Remove(currentNodeId);
+
+                if (currentNodeId == destinationNode.Id)
+                    break;
+
+                var currentNode = nodes.First(n => n.Id == currentNodeId);
+                var routes = currentNode.OriginRoutes;
+
+                foreach (var route in routes)
+                {
+                    var neighborId = route.DestinationId;
+                    if (!unvisited.Contains(neighborId))
+                        continue;
+
+                    var newDist = distances[currentNodeId] + route.Price;
+                    if (newDist < distances[neighborId])
+                    {
+                        distances[neighborId] = newDist;
+                        previousNodes[neighborId] = route;
+                    }
+                }
+            }
+
+            var path = new List<RouteModel>();
+            var currentId = destinationNode.Id;
+            while (previousNodes.ContainsKey(currentId))
+            {
+                var route = previousNodes[currentId];
+                path.Insert(0, route);
+                currentId = route.OriginId;
+            }
+
+            if (path?.Count > 0) 
+            {
+                decimal total = 0;
+                string finalRoute = origin;
+                foreach (var route in path)
+                {
+                    total += route.Price;
+                    finalRoute = string.Concat(finalRoute, " - ", route.Destination.Name);
+                }
+                return $"{finalRoute} ao custo de {total}";
+            }
+
+            return "O trecho consultado não existe";
         }
     }
 }

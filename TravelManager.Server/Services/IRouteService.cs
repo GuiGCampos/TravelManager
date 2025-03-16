@@ -6,6 +6,7 @@ namespace TravelManager.Server.Services
         Task<(bool, string)> GetRouteDetails(string origin, string destination);
         Task DeleteRoute(string origin, string destination);
         Task UpdateRoute(int routeId, string origin, string destination, decimal price);
+        Task<string> GetLowestPrice(string origin, string destination);
     }
 }
     
