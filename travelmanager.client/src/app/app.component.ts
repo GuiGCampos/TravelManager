@@ -1,37 +1,63 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-
-interface WeatherForecast {
-  date: string;
-  temperatureC: number;
-  temperatureF: number;
-  summary: string;
-}
+import { Component } from '@angular/core';
+import { RouteService } from './services/route.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
-  public forecasts: WeatherForecast[] = [];
+export class AppComponent {
+  from = '';
+  to = '';
+  price!: number;
+  routeId!: number;
+  result: any;
 
-  constructor(private http: HttpClient) {}
+  constructor(private routeService: RouteService) { }
 
-  ngOnInit() {
-    this.getForecasts();
+  createRoute() {
+    this.routeService.createRoute(this.from, this.to, this.price).subscribe(() => {
+      alert('Rota criada com sucesso!');
+    }, error =>
+    {
+      const erro = JSON.parse(error.error);
+      alert(erro.error);
+    });
   }
 
-  getForecasts() {
-    this.http.get<WeatherForecast[]>('/weatherforecast').subscribe(
-      (result) => {
-        this.forecasts = result;
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
+  deleteRoute() {
+    this.routeService.deleteRoute(this.from, this.to).subscribe(() => {
+      alert('Rota deletada com sucesso!');
+    }, error => {
+      const erro = JSON.parse(error.error);
+      alert(erro.error);
+    });
   }
 
-  title = 'travelmanager.client';
+  updateRoute() {
+    this.routeService.updateRoute(this.routeId, this.from, this.to, this.price).subscribe(() => {
+      alert('Rota atualizada com sucesso!');
+    }, error => {
+      const erro = JSON.parse(error.error);
+      alert(erro.error);
+    });
+  }
+
+  getRoute() {
+    this.routeService.getRoute(this.from, this.to).subscribe(response => {
+      this.result = response;
+    }, error => {
+      const erro = JSON.parse(error.error);
+      alert(erro.error);
+    });
+  }
+
+  getLowestPrice() {
+    this.routeService.getLowestPrice(this.from, this.to).subscribe(response => {
+      this.result = response;
+    }, error => {
+      const erro = JSON.parse(error.error);
+      alert(erro.error);
+    });
+  }
 }

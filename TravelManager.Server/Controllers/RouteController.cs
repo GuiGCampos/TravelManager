@@ -21,7 +21,7 @@ namespace TravelManager.Server.Controllers
         public async Task<IActionResult> CreateRoute(string from, string to, decimal price)
         {
             await _routeService.CreateRoute(from, to, price);
-            return Ok();
+            return Ok("Cadastrado com sucesso!");
         }
 
         [SwaggerOperation(Summary = "Deleta rota de origem e destino")]
@@ -29,7 +29,7 @@ namespace TravelManager.Server.Controllers
         public async Task<IActionResult> DeleteRoute(string from, string to)
         {
             await _routeService.DeleteRoute(from, to);
-            return Ok();
+            return Ok("Deletado com sucesso!");
         }
 
         [SwaggerOperation(Summary = "Atualiza rota de origem e destino")]
@@ -37,7 +37,7 @@ namespace TravelManager.Server.Controllers
         public async Task<IActionResult> UpdateRoute(int routeId, string from, string to, decimal price)
         {
             await _routeService.UpdateRoute(routeId, from, to, price);
-            return Ok();
+            return Ok("Atualizado com sucesso!");
         }
 
         [SwaggerOperation(Summary = "Consulta rota de origem e destino")]

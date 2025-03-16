@@ -81,6 +81,8 @@ namespace TravelManager.Server.Services
 
         public async Task<(bool, string)> GetRouteDetails(string origin, string destination)
         {
+            origin = ApplyFormat(origin);
+            destination = ApplyFormat(destination);
             var route = await GetRoute(origin, destination);
 
             if (route == null)

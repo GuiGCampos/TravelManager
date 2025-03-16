@@ -4,8 +4,6 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -14,11 +12,21 @@ builder.Services.AddSwaggerGen(options =>
     options.EnableAnnotations();
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy => policy
+            .WithOrigins("http://localhost:4200", "https://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+});
+
 //Dependency Injection
 builder.Services.AddScoped<IRouteService, RouteService>();
 
 var app = builder.Build();
 
+app.UseCors("AllowAll");
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseDefaultFiles();
 app.UseStaticFiles();
